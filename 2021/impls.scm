@@ -6,6 +6,104 @@
   #:export (make-sub))
 
 ;; -----
+;; DAY 3
+;; -----
+(define-public (day3-part1)
+  (let* ((readings (read-lines-to-list "input-day3"))
+         (result (get-power readings)))
+    result))
+
+(define-public (day3-part2)
+  (let* ((readings (read-lines-to-list "input-day3"))
+         (result (get-life-support readings)))
+    result))
+
+(define-public (transpose xs)
+  (apply map list xs))
+
+(define (do-rating rate columns)
+  (let* ((rating (rate columns))
+         (rating (list->string rating)))
+    (string->number rating 2)))
+
+(define-public (get-power readings)
+  (let* ((readings (map string->list readings))
+         (columns  (transpose readings))
+         (gamma    (do-rating rate-gamma columns))
+         (epsilon  (do-rating rate-epsilon columns)))
+    (* gamma epsilon)))
+
+(define-public (get-life-support readings)
+  (let* ((readings (map string->list readings))
+         (columns  (transpose readings))
+         (oxygen   (do-rating rate-oxygen columns))
+         (co2      (do-rating rate-co2 columns)))
+    (* oxygen co2)))
+
+(define (rate-gamma columns)
+  (map most-frequent-bit columns))
+
+(define (rate-epsilon columns)
+  (map least-frequent-bit columns))
+
+(define (rate-oxygen list-columns)
+  (reverse
+   (oxygen-rating-aux '() list-columns)))
+
+(define (rate-co2 list-columns)
+  (reverse
+   (co2-rating-aux '() list-columns)))
+
+(define (oxygen-rating-aux acc list-columns)
+  (if (eq? list-columns '())
+      acc
+      (let* ((current-col (car list-columns))
+             (common-bit (most-frequent-bit current-col))
+             (rows (transpose list-columns))
+             (matching (filter
+                        (lambda (row)
+                          (eq? common-bit (car row)))
+                        rows))
+             (cols-matching (transpose matching)))
+        (oxygen-rating-aux (cons common-bit acc)
+                           (cdr cols-matching)))))
+
+(define-public (co2-rating-aux acc list-columns)
+  (if (eq? list-columns '())
+      acc
+      (let* ((current-col (car list-columns))
+             (uncommon-bit (least-frequent-bit current-col))
+             (rows (transpose list-columns))
+             (matching (filter
+                        (lambda (row)
+                          (eq? uncommon-bit (car row)))
+                        rows))
+             (cols-matching (transpose matching)))
+        (co2-rating-aux (cons uncommon-bit acc)
+                        (cdr cols-matching)))))
+
+(define (most-frequent-bit column)
+  (let* ((col-str    (list->string column))
+         (max-count  (string-length col-str))
+         (num-ones   (string-count col-str #\1)))
+    (if (< (* 2 num-ones)
+           max-count)
+        #\0
+        #\1)))
+
+(define (least-frequent-bit column)
+  (let* ((col-str    (list->string column))
+         (max-count  (string-length col-str))
+         (num-ones   (string-count col-str #\1)))
+    (if (eq? (length column) 1)
+        (car column)
+        (if (>= (* 2 num-ones) max-count)
+            #\0
+            (if (eq? num-ones 0)
+                #\0
+                #\1)))))
+
+;; -----
 ;; DAY 2
 ;; -----
 (define-record-type <sub>
