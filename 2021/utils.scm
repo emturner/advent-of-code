@@ -15,3 +15,21 @@
                 (reverse ls)
                 (step (cons line ls))))))
       (step '()))))
+
+(define-public (time-proc proc)
+  (let* ((start (get-internal-run-time))
+         (res (proc))
+         (end (get-internal-run-time))
+         (diff (- end start)))
+    (/ diff internal-time-units-per-second 1.0)))
+
+(define-public (bench-proc proc)
+  (/ (bench-aux proc 10000 0.0)
+     10000))
+
+(define (bench-aux proc iter total)
+  (if (> iter 0)
+      (bench-aux proc
+                 (- iter 1)
+                 (+ total (time-proc proc)))
+      total))
