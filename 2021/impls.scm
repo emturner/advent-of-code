@@ -35,9 +35,8 @@
 
 (define-public (get-life-support readings)
   (let* ((readings (map string->list readings))
-         (columns  (transpose readings))
-         (oxygen   (do-rating rate-oxygen columns))
-         (co2      (do-rating rate-co2 columns)))
+         (oxygen   (do-rating rate-oxygen readings))
+         (co2      (do-rating rate-co2 readings)))
     (* oxygen co2)))
 
 (define (rate-gamma columns)
@@ -46,56 +45,58 @@
 (define (rate-epsilon columns)
   (map least-frequent-bit columns))
 
-(define (rate-oxygen list-columns)
+(define (rate-oxygen list-rows)
   (reverse
-   (oxygen-rating-aux '() list-columns)))
+   (oxygen-rating-aux '() list-rows)))
 
-(define (rate-co2 list-columns)
+(define (rate-co2 list-rows)
   (reverse
-   (co2-rating-aux '() list-columns)))
+   (co2-rating-aux '() list-rows)))
 
-(define (oxygen-rating-aux acc list-columns)
-  (if (eq? list-columns '())
+(define (oxygen-rating-aux acc list-rows)
+  (if (eq? (car list-rows) '())
       acc
-      (let* ((current-col (car list-columns))
+      (let* ((current-col (map car list-rows))
              (common-bit (most-frequent-bit current-col))
-             (rows (transpose list-columns))
              (matching (filter
                         (lambda (row)
                           (eq? common-bit (car row)))
-                        rows))
-             (cols-matching (transpose matching)))
+                        list-rows)))
         (oxygen-rating-aux (cons common-bit acc)
-                           (cdr cols-matching)))))
+                           (map cdr matching)))))
 
-(define-public (co2-rating-aux acc list-columns)
-  (if (eq? list-columns '())
+(define-public (co2-rating-aux acc list-rows)
+  (if (eq? (car list-rows) '())
       acc
-      (let* ((current-col (car list-columns))
+      (let* ((current-col (map car list-rows))
              (uncommon-bit (least-frequent-bit current-col))
-             (rows (transpose list-columns))
              (matching (filter
                         (lambda (row)
                           (eq? uncommon-bit (car row)))
-                        rows))
-             (cols-matching (transpose matching)))
+                        list-rows)))
         (co2-rating-aux (cons uncommon-bit acc)
-                        (cdr cols-matching)))))
+                        (map cdr matching)))))
+
+(define (count-ones xs)
+  (fold (lambda (x acc)
+          (if (eq? x #\1)
+              (+ 1 acc)
+              acc))
+        0
+        xs))
 
 (define (most-frequent-bit column)
-  (let* ((col-str    (list->string column))
-         (max-count  (string-length col-str))
-         (num-ones   (string-count col-str #\1)))
+  (let* ((max-count  (length column))
+         (num-ones   (count-ones column)))
     (if (< (* 2 num-ones)
            max-count)
         #\0
         #\1)))
 
 (define (least-frequent-bit column)
-  (let* ((col-str    (list->string column))
-         (max-count  (string-length col-str))
-         (num-ones   (string-count col-str #\1)))
-    (if (eq? (length column) 1)
+  (let* ((max-count  (length column))
+         (num-ones   (count-ones column)))
+    (if (eq? max-count 1)
         (car column)
         (if (>= (* 2 num-ones) max-count)
             #\0
