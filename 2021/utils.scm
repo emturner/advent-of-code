@@ -16,6 +16,9 @@
                 (step (cons line ls))))))
       (step '()))))
 
+(define-public (transpose xs)
+  (apply map list xs))
+
 (define-public (time-proc proc)
   (let* ((start (get-internal-run-time))
          (res (proc))

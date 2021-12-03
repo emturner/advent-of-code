@@ -18,9 +18,6 @@
          (result (get-life-support readings)))
     result))
 
-(define-public (transpose xs)
-  (apply map list xs))
-
 (define (do-rating rate columns)
   (let* ((rating (rate columns))
          (rating (list->string rating)))

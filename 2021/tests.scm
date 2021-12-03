@@ -3,14 +3,6 @@
 
 (test-begin "day3")
 
-(test-equal "transpose single"
-  '((1) (2))
-  (transpose '((1 2))))
-
-(test-equal "transpose multiple"
-  '((1 4 7) (2 5 8) (3 6 9))
-  (transpose '((1 2 3) (4 5 6) (7 8 9))))
-
 (define day3-example-data
   '("00100" "11110" "10110" "10111" "10101" "01111" "00111" "11100" "10000" "11001" "00010" "01010"))
 
