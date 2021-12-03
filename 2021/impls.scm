@@ -9,12 +9,12 @@
 ;; DAY 3
 ;; -----
 (define-public (day3-part1)
-  (let* ((readings (read-lines-to-list "input-day3"))
+  (let* ((readings (read-lines-to-list "day3"))
          (result (get-power readings)))
     result))
 
 (define-public (day3-part2)
-  (let* ((readings (read-lines-to-list "input-day3"))
+  (let* ((readings (read-lines-to-list "day3"))
          (result (get-life-support readings)))
     result))
 
@@ -112,7 +112,7 @@
   (aim         sub-aim))
 
 (define-public (day2-part1)
-  (let* ((moves (read-lines-to-list "input-day2"))
+  (let* ((moves (read-lines-to-list "day2"))
          (moves (map parse-sub-move moves))
          (sub   (sub-after-moves moves))
          (depth (sub-depth sub))
@@ -120,7 +120,7 @@
     (* depth horiz)))
 
 (define-public (day2-part2)
-  (let* ((moves (read-lines-to-list "input-day2"))
+  (let* ((moves (read-lines-to-list "day2"))
          (moves (map parse-sub-move moves))
          (sub   (sub-after-moves-with-aim moves))
          (depth (sub-depth sub))
@@ -169,12 +169,12 @@
 ;; DAY 1
 ;; -----
 (define-public (day1-part1)
-  (let* ((depths (read-lines-to-list "input-day1"))
+  (let* ((depths (read-lines-to-list "day1"))
          (depths (map string->number depths)))
     (count-increases depths)))
 
 (define-public (day1-part2)
-  (let* ((depths (read-lines-to-list "input-day1"))
+  (let* ((depths (read-lines-to-list "day1"))
          (depths (map string->number depths)))
     (count-increases-sliding depths)))
 

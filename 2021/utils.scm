@@ -3,10 +3,11 @@
   #:use-module (ice-9 rdelim)
   #:use-module (srfi srfi-1))
 
-(define dir "/home/emma/sources/advent-of-code/2021/")
+(define inputs-dir "/home/emma/sources/advent-of-code/2021/inputs/")
+
 (define-public (read-lines-to-list filename)
   "reads a file line by line, calling next on each line"
-  (call-with-input-file (string-append dir filename)
+  (call-with-input-file (string-append inputs-dir filename)
     (lambda (file)
       (define step
         (lambda (ls)
@@ -21,7 +22,7 @@
 
 (define-public (time-proc proc)
   (let* ((start (get-internal-run-time))
-         (res (proc))
+         (_ (proc))
          (end (get-internal-run-time))
          (diff (- end start)))
     (/ diff internal-time-units-per-second 1.0)))
