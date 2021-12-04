@@ -20,6 +20,12 @@
 (define-public (transpose xs)
   (apply map list xs))
 
+(define-public (all? proc xs)
+  (not
+   (any
+    (lambda (x) (not (proc x)))
+    xs)))
+
 (define-public (time-proc proc)
   (let* ((start (get-internal-run-time))
          (_ (proc))
