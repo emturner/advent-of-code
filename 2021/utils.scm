@@ -26,6 +26,20 @@
     (lambda (x) (not (proc x)))
     xs)))
 
+(define-public (range start end)
+  (if (> start end)
+      (range-aux < '() start end +)
+      (range-aux > '() start end -)))
+
+(define (range-aux cmp range start end move)
+  (if (cmp start end)
+      range
+      (range-aux cmp
+                 (cons end range)
+                 start
+                 (move end 1)
+                 move)))
+
 (define-public (time-proc proc)
   (let* ((start (get-internal-run-time))
          (_ (proc))
