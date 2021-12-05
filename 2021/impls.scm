@@ -22,34 +22,22 @@
     (count-vent-line-intersections vent-lines)))
 
 (define-public (count-vent-line-intersections vent-lines)
-  (let* ((sums-per-point (sum-vent-points-from-lines vent-lines))
-         (at-least-two (filter
-                        (lambda (p)
-                          (< 1 (cdr p)))
-                        sums-per-point)))
-    (length at-least-two)))
+  (let ((sums-per-point (sum-vent-points-from-lines vent-lines)))
+    (hash-count (lambda (key value) (< 1 value)) sums-per-point)))
 
 (define-public (sum-vent-points-from-lines vent-lines)
-  (fold sum-vent-points-in-lines '() vent-lines))
+  (fold sum-vent-points-in-lines (make-hash-table) vent-lines))
 
 (define (sum-vent-points-in-lines vent-lines acc)
   (fold add-vent-point-to-sum acc vent-lines))
 
 (define (add-vent-point-to-sum point acc)
-  (let ((entry (assoc point acc)))
+  (let ((entry (hash-get-handle acc point)))
     (if entry
-        (if (< 1 (cdr entry))
-            acc
-            ;; OPTIMIZATION - we only care if there are more then one
-            ;; not if there are 3+
-            ;; TODO: for some reason assoc-set! was fails with
-            ;;       'cdr-set!: expected mutable pair' but all pairs in guile
-            ;;       are mutable???  Hence the super inefficient 'assoc-remove!'
-            ;; TODO: learn how to use hash-maps - that's what should be used
-            ;;       here
-            (let ((_ (set! acc (assoc-remove! acc point))))
-              (acons point (+ 1 (cdr entry)) acc)))
-        (acons point 1 acc))))
+        (let ((_ (hash-set! acc point (+ 1 (cdr entry)))))
+            acc)
+        (let ((_ (hash-set! acc point 1)))
+          acc))))
 
 (define-public (vent-coords-pair->line coords)
   (match coords

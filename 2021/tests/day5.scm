@@ -58,15 +58,6 @@
   '((5 . 9) (6 . 8) (7 . 7) (8 . 6))
   (vent-coords-pair->line '((5 . 9) . (8 . 6))))
 
-
-(test-equal "points with vent count"
-  (reverse '(((0 . 0) . 1)
-             ((0 . 2) . 2)
-             ((1 . 2) . 1)
-             ((2 . 2) . 1)))
-  (sum-vent-points-from-lines '(((0 . 0) (0 . 2))
-                                ((0 . 2) (1 . 2) (2 . 2)))))
-
 (test-equal "example part 1"
   5
   (count-vent-line-intersections
@@ -77,5 +68,8 @@
   12
   (count-vent-line-intersections
    (map vent-coords-pair->line parsed-example-input)))
+
+(test-equal "day5 part1" 6189 (day5-part1))
+(test-equal "day5 part2" 19164 (day5-part2))
 
 (test-end "day5")
