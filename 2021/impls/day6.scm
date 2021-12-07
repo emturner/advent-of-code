@@ -36,7 +36,7 @@
                (match days
                  (0 (let* ((num-6 (or (hash-ref new-table 6) 0))
                            (_ (hash-set! new-table 6 (+ num-6 num)))
-                           (_ (hash-set! new-table 8 (+ num-6 num))))
+                           (_ (hash-set! new-table 8 num)))
                       #t))
                  (7 (let* ((num-6 (or (hash-ref new-table 6) 0))
                            (_ (hash-set! new-table 6 (+ num-6 num))))
