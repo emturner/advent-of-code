@@ -17,6 +17,16 @@
                 (step (cons line ls))))))
       (step '()))))
 
+(define-public (min-max xs)
+  (fold
+   (lambda (x acc)
+     (match acc
+       ((min . max)
+        (cons (if (< x min) x min)
+              (if (> x max) x max)))))
+   (cons (car xs) (car xs))
+   xs))
+
 (define-public (transpose xs)
   (apply map list xs))
 

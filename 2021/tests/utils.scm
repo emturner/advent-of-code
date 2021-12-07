@@ -24,3 +24,11 @@
   (range 9 1))
 
 (test-end "range")
+
+(test-begin "min-max")
+
+(test-equal "produces min and max from a list"
+  '(3 . 9)
+  (min-max '(5 4 9 3 8)))
+
+(test-end "min-max")
