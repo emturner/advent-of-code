@@ -1,5 +1,5 @@
-(use-modules (srfi srfi-64)
-             (impls))
+(use-modules (impls day2)
+             (srfi srfi-64))
 
 (test-begin "day2")
 

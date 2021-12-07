@@ -1,4 +1,4 @@
-(use-modules (impls)
+(use-modules (impls day4)
              (srfi srfi-64))
 
 (test-begin "day4")
